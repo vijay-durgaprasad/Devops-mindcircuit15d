@@ -10,7 +10,7 @@ pipeline {
         stage('CLONE GITHUB CODE') {
             steps {
                 echo 'In this stage code will be clone'
-				git branch: 'main', url: 'https://github.com/devopstraininghub/mindcircuit15d.git'
+				git branch: 'main', url: 'https://github.com/vijay-durgaprasad/Devops-mindcircuit15d.git'
 				
 				}
         }
@@ -22,11 +22,20 @@ pipeline {
 				
             }
         }		
-		
+	stage('sonarqube scan') {
+            steps {
+                echo 'scanning project'
+                sh 'ls -ltrh'
+                
+                sh ''' mvn sonar:sonar \\
+                      -Dsonar.host.url=http://18.215.176.218:9000/ \\
+                      -Dsonar.login=squ_e414483457e613e38bcb52f5cea91db267ea86f1'''
+            }
+    	}	
         stage('DEPLOY') {
             steps {
                 echo 'In this stage .war artiface will be deployed on to tomcat '
-				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://ec2-52-23-168-78.compute-1.amazonaws.com:8082/')], contextPath: 'mcapp', war: '**/*.war'
+				deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://18.215.176.218:8082/')], contextPath: 'mcapp', war: '**/*.war'
 				
             }
         }		
