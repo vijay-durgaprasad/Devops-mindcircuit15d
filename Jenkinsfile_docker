@@ -14,14 +14,6 @@ pipeline {
 				
 				}
         }
-		
-        stage('BUILDING THE CODE') {
-            steps {
-                echo 'In this stage code will be build and mvn artifact will be generated'
-				sh 'mvn clean install '
-				
-            }
-        }		
 	stage('sonarqube scan') {
             steps {
                 echo 'scanning project'
@@ -32,6 +24,14 @@ pipeline {
                       -Dsonar.login=squ_e414483457e613e38bcb52f5cea91db267ea86f1'''
             }
     	}	
+        stage('BUILDING THE CODE') {
+            steps {
+                echo 'In this stage code will be build and mvn artifact will be generated'
+				sh 'mvn clean install '
+				
+            }
+        }		
+	
         stage('DEPLOY') {
             steps {
                 echo 'In this stage .war artiface will be deployed on to tomcat '
